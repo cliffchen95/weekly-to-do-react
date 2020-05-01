@@ -31,6 +31,7 @@ export default class WeekContainer extends Component {
     await this.getEvents();
     this.generateDays(this.state.startDate);
   }
+  
   generateDays(startDate) {
     let date = new Date(startDate);
     const dates = []

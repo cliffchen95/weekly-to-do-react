@@ -1,5 +1,6 @@
 import React from 'react';
-import { Header, Card, List, Button, Icon, Popup} from 'semantic-ui-react'
+import { Header, Card, List, Button, Icon, Popup, Modal } from 'semantic-ui-react';
+import NewEventForm from '../NewEventForm';
 
 export default function DayContainer(props) {
   const events = props.events.map((event, key) => {
@@ -26,11 +27,10 @@ export default function DayContainer(props) {
         </Card.Description>
       </Card.Content>
       <Card.Content extra>
-      <Popup
-      trigger={<Button icon='add' circular floated='right' size='tiny'/>}
-      content="Click to add events"
-      basic
-      />
+      <Modal trigger={<Button icon='add' circular floated='right' size='tiny'/>}>
+        <Modal.Header>Date</Modal.Header>
+        <Modal.Content><NewEventForm /></Modal.Content>
+      </Modal>
       </Card.Content>
     </Card>
   )

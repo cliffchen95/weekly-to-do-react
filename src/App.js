@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import LoginRegisterForm from './LoginRegisterForm';
 import WeekContainer from './WeekContainer';
 import HeaderContainer from './HeaderContainer';
+import NewEventForm from './NewEventForm';
+
 import './App.css';
 
 class App extends Component {
@@ -117,7 +119,6 @@ class App extends Component {
           register={this.register}
           login={this.login}
           />
-        }
         }
       </div>
     );
