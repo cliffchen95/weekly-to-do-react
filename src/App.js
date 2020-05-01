@@ -8,10 +8,34 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      loggedIn: true,
+      loggedIn: false,
+      user: "",
+      startDate: ""
     }
   }
 
+  register = async (info) => {
+    const url = process.env.REACT_APP_API_URL + "api/v1/users"
+    try {
+      const res = await fetch(url, {
+        credentials: 'include',
+        method: 'POST',
+        body: JSON.stringify(info),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      const json = await res.json();
+      if (json.status == 201) {
+        this.setState({
+          loggedIn: true,
+          user: json.data.username
+        })
+      } 
+    } catch(err) {
+      console.error(err)
+    }
+  }
   render() {
     return (
       <div className="App">

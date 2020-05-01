@@ -5,12 +5,23 @@ class LoginRegisterForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      register: false
+      register: false,
+      username: "",
+      password: "",
+      checkPassword: ""
     }
+  }
+  onChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value })
   }
 
   switchLoginRegister = () => {
-    this.setState({ register: !this.state.register })
+    this.setState({ 
+      register: !this.state.register,
+      username: "",
+      password: "",
+      checkPassword: "" 
+    })
   }
 
   render() {
@@ -19,11 +30,22 @@ class LoginRegisterForm extends Component {
         <Header size='medium' textAlign='center'>Log in</Header>
         <Form.Field>
           <label>Username</label>
-          <input placeholder='Username' />
+          <input 
+          placeholder='Username'
+          name='username'
+          value={this.state.username}
+          onChange={this.onChange}
+          />
         </Form.Field>
         <Form.Field>
           <label>Password</label>
-          <input placeholder='Password' type='password'/>
+          <input 
+          placeholder='Password' 
+          type='password'
+          name='password'
+          value={this.state.password}
+          onChange={this.onChange}
+          />
         </Form.Field>
         <Button 
         type='submit'
@@ -37,15 +59,32 @@ class LoginRegisterForm extends Component {
         <Header size='medium' textAlign='center'>Register</Header>
         <Form.Field>
           <label>Username</label>
-          <input placeholder='Username' />
+          <input 
+          placeholder='Username'
+          name='username'
+          value={this.state.username}
+          onChange={this.onChange}
+          />
         </Form.Field>
         <Form.Field>
           <label>Password</label>
-          <input placeholder='Password' type='password'/>
+          <input 
+          placeholder='Password' 
+          type='password'
+          name='password'
+          value={this.state.password}
+          onChange={this.onChange}
+          />
         </Form.Field>
         <Form.Field>
           <label>Confirm Password</label>
-          <input placeholder='Re-enter Password' type='password'/>
+          <input 
+          placeholder='Re-enter Password' 
+          type='password'
+          name='checkPassword'
+          value={this.state.checkPassword}
+          onChange={this.onChange}
+          />
         </Form.Field>
         <Button 
         type='submit'
