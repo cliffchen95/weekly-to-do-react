@@ -10,7 +10,7 @@ class App extends Component {
     this.state = {
       loggedIn: false,
       user: "",
-      startDate: new Date()
+      startDate: ""
     }
   }
 

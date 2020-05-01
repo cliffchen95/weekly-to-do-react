@@ -7,7 +7,7 @@ export default class WeekContainer extends Component {
     super(props);
     this.state = {
       events: [],
-      startDate: new Date(props.startDate),
+      startDate: props.startDate,
       dates: []
     }
   }
@@ -29,14 +29,15 @@ export default class WeekContainer extends Component {
 
   async componentDidMount() {
     await this.getEvents();
-    this.generateDays();
+    this.generateDays(this.state.startDate);
   }
-  generateDays() {
-    let date = this.state.startDate;
+  generateDays(startDate) {
+    let date = new Date(startDate);
     const dates = []
     for (let i = 0; i < 7; i++) {
-      dates.push(new Date(date))
       date.setDate(date.getDate() + 1)
+      console.log(date)
+      dates.push(new Date(date))
     }
     this.setState({ dates: dates})
   }
