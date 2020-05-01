@@ -27,6 +27,24 @@ export default class WeekContainer extends Component {
     }
   }
 
+  addEvent = async (info) => {
+    try {
+      const url = process.env.REACT_APP_API_URL + 'api/v1/events/';
+      const res = await fetch(url, {
+        credentials: 'include',
+        method: 'POST',
+        body: JSON.stringify(info),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const json = await res.json();
+      await this.getEvents();
+      return json;
+    } catch (err) {
+      console.log(err)
+    }
+  }
   async componentDidMount() {
     await this.getEvents();
     this.generateDays(this.state.startDate);
@@ -36,9 +54,8 @@ export default class WeekContainer extends Component {
     let date = new Date(startDate);
     const dates = []
     for (let i = 0; i < 7; i++) {
+      dates.push(date.toGMTString())
       date.setDate(date.getDate() + 1)
-      console.log(date)
-      dates.push(new Date(date))
     }
     this.setState({ dates: dates})
   }
@@ -47,11 +64,15 @@ export default class WeekContainer extends Component {
     const dayContainers = (
       this.state.dates.map((date, key) => {
         return (
-          <DayContainer date={date} key={key} events={this.state.events.filter( event => new Date(event.date).getTime() == date.getTime())} />
+          <DayContainer 
+          date={new Date(date)} key={key} 
+          events={this.state.events.filter( event => new Date(event.date).getDate() == new Date(date).getDate())}
+          addEvent={this.addEvent}
+          />
         )
       })
     )
-    console.log(dayContainers)
+
     return (
       <React.Fragment>
         <Header as='h3' block>Weekly Goals: I want to be famous</Header>

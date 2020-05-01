@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import LoginRegisterForm from './LoginRegisterForm';
 import WeekContainer from './WeekContainer';
 import HeaderContainer from './HeaderContainer';
-import NewEventForm from './NewEventForm';
 
 import './App.css';
 
@@ -24,12 +23,11 @@ class App extends Component {
         method: 'GET'
       })
       const json = await res.json();
-      console.log("this is getGoal")
-      console.log(json);
       if (json.status == 404) {
         return await this.createGoal({ goal: "" })
       } else {
-        this.setState({ startDate: json.data.start_date })
+        const startDate = new Date(json.data.start_date);
+        this.setState({ startDate: startDate.toGMTString() })
       }
     } catch (err) {
       console.log(err);
@@ -47,7 +45,8 @@ class App extends Component {
         }
       })
       const json = await res.json();
-      this.setState({ startDate: json.data.start_date })
+      const startDate = new Date(json.data.start_date);
+      this.setState({ startDate: startDate.toGMTString() })
     } catch (err) {
       console.log(err)   
     }

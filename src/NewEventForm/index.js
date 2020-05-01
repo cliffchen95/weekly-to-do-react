@@ -12,10 +12,27 @@ export default class NewEventForm extends Component {
     }
   }
   onChange = (e) => {
-    console.log(e.target.value)
     this.setState({ [e.target.name]: e.target.value })
   }
-
+  onSubmit = async (e) => {
+    try {
+      e.preventDefault()
+      const year = this.state.date.getFullYear()
+      const month = this.state.date.getMonth() + 1
+      const day = this.state.date.getUTCDate()
+      const result = await this.props.addEvent({
+        category: this.state.category,
+        title: this.state.title,
+        description: this.state.description,
+        year: year,
+        month: month,
+        day: day
+      });
+      this.props.closeModel();
+    } catch (err) {
+      console.log(err)
+    }
+  }
   render() {
     const options = [
       { key: 'all', text: 'All', value: 'all' },
@@ -23,7 +40,7 @@ export default class NewEventForm extends Component {
       { key: 'products', text: 'Products', value: 'products' },
     ]
     return(
-      <Form >
+      <Form onSubmit={this.onSubmit}>
         <Header size='medium' textAlign='center'>New Event</Header>
         <Form.Field>
           <label>Title</label>
