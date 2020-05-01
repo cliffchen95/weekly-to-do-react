@@ -15,7 +15,7 @@ class App extends Component {
   }
 
   register = async (info) => {
-    const url = process.env.REACT_APP_API_URL + "api/v1/users"
+    const url = process.env.REACT_APP_API_URL + "api/v1/users/"
     try {
       const res = await fetch(url, {
         credentials: 'include',
@@ -43,7 +43,7 @@ class App extends Component {
         {
           this.state.loggedIn ?
           <WeekContainer /> :
-          <LoginRegisterForm />
+          <LoginRegisterForm register={this.register}/>
         }
         }
       </div>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Button, Form, Checkbox, Divider, Grid, Segment } from 'semantic-ui-react';
+import { Header, Button, Form, Checkbox, Divider, Grid, Segment, Message } from 'semantic-ui-react';
 
 class LoginRegisterForm extends Component {
   constructor(props) {
@@ -8,13 +8,32 @@ class LoginRegisterForm extends Component {
       register: false,
       username: "",
       password: "",
-      checkPassword: ""
+      checkPassword: "",
+      warning: 0
     }
   }
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
   }
 
+  onRegister = (e) => {
+    e.preventDefault()
+    if (this.state.checkPassword !== this.state.password) {
+      this.setState({ warning: 1 })
+    } else {
+      this.props.register({
+        username: this.state.username,
+        password: this.state.password
+      })
+      this.setState({
+        register: false,
+        username: "",
+        password: "",
+        checkPassword: "",
+        warning: 0
+      })
+    }
+  }
   switchLoginRegister = () => {
     this.setState({ 
       register: !this.state.register,
@@ -25,6 +44,15 @@ class LoginRegisterForm extends Component {
   }
 
   render() {
+    const WarningMessage = () => {
+      if (this.state.warning === 1) {
+        return(
+        <Message>
+          <Message.Header>Your password does not match!</Message.Header>
+          <p>Please try again!</p>
+        </Message>
+      )}
+    }
     const LoginForm = (
       <Form>
         <Header size='medium' textAlign='center'>Log in</Header>
@@ -55,7 +83,7 @@ class LoginRegisterForm extends Component {
       </Form>
     )
     const RegisterForm = (
-      <Form>
+      <Form onSubmit={this.onRegister}>
         <Header size='medium' textAlign='center'>Register</Header>
         <Form.Field>
           <label>Username</label>
@@ -91,6 +119,7 @@ class LoginRegisterForm extends Component {
         content={!this.state.register ? 'Log in' : 'Register'} 
         icon={!this.state.register ? 'sign-in' : 'signup'} 
         />
+        {WarningMessage()}
       </Form>
     )
     return (
