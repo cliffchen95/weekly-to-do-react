@@ -4,36 +4,49 @@ import { Header, Button, Form, Checkbox, Divider, Grid, Segment, Message } from 
 class LoginRegisterForm extends Component {
   constructor(props) {
     super(props);
+    this._isMounted = false;
     this.state = {
       register: false,
       username: "",
       password: "",
       checkPassword: "",
       warning: 0
-    }
+    };
   }
+
+  componentWillMount() {
+    this._isMounted = true;
+  }
+
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  onRegister = (e) => {
+  onRegister = async (e) => {
     e.preventDefault()
     if (this.state.checkPassword !== this.state.password) {
       this.setState({ warning: 1 })
     } else {
-      this.props.register({
-        username: this.state.username,
-        password: this.state.password
-      })
-      this.setState({
-        register: false,
-        username: "",
-        password: "",
-        checkPassword: "",
-        warning: 0
-      })
+      try {
+        const result = await this.props.register({
+          username: this.state.username,
+          password: this.state.password
+        })
+
+        this._isMounted && this.setState({
+          register: result.status === 401,
+          username: "",
+          password: "",
+          checkPassword: "",
+          warning: result.status,
+          message: result.message
+        })
+      } catch(err) {
+        console.error(err)
+      }
     }
   }
+
   switchLoginRegister = () => {
     this.setState({ 
       register: !this.state.register,
@@ -43,12 +56,22 @@ class LoginRegisterForm extends Component {
     })
   }
 
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
   render() {
     const WarningMessage = () => {
       if (this.state.warning === 1) {
         return(
         <Message>
           <Message.Header>Your password does not match!</Message.Header>
+          <p>Please try again!</p>
+        </Message>
+      )}
+      if (this.state.warning === 401) {
+        return(
+        <Message>
+          <Message.Header>{this.state.message}</Message.Header>
           <p>Please try again!</p>
         </Message>
       )}
