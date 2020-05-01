@@ -55,14 +55,13 @@ export default class WeekContainer extends Component {
     ]
     return (
       <React.Fragment>
-        <Header as='h3'>Weekly Goals: I want to be famous</Header>
+        <Header as='h3' block>Weekly Goals: I want to be famous</Header>
         <Popup
         trigger={<Button icon='edit' circular floated='right'/>}
         content="Click to edit weekly goal"
         basic
         />
-        <Divider />
-        <Card.Group>
+        <Card.Group className="ui four doubling cards" stackable centered>
           <DayContainer events={events} date="Mon, April 24" />
           <DayContainer events={events} date="Tues, April 25" />
           <DayContainer events={events} date="Wed, April 26" />
