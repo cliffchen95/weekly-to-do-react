@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import LoginRegisterForm from './LoginRegisterForm'
+import LoginRegisterForm from './LoginRegisterForm';
+import WeekContainer from './WeekContainer';
 import './App.css';
 
 class App extends Component {
@@ -13,7 +14,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <LoginRegisterForm />
+        <WeekContainer />
       </div>
     );
   }

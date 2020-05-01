@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Header, Button, Form, Checkbox, Divider, Grid, Segment } from 'semantic-ui-react';
+
 class LoginRegisterForm extends Component {
   constructor(props) {
     super(props);
@@ -55,7 +56,7 @@ class LoginRegisterForm extends Component {
             <Grid.Column verticalAlign='middle'>
               <Button 
               content={this.state.register ? 'Log in' : 'Register'} 
-              icon={this.state.register ? 'user' : 'signup'} 
+              icon={this.state.register ? 'sign-in' : 'signup'} 
               size='big' 
               onClick={this.switchLoginRegister}
               />
