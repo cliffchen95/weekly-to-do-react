@@ -16,7 +16,7 @@ class LoginRegisterForm extends Component {
   render() {
     const LoginForm = (
       <Form>
-        <Header size='medium' textAlign='center'>Login</Header>
+        <Header size='medium' textAlign='center'>Log in</Header>
         <Form.Field>
           <label>Username</label>
           <input placeholder='Username' />
@@ -25,7 +25,11 @@ class LoginRegisterForm extends Component {
           <label>Password</label>
           <input placeholder='Password' type='password'/>
         </Form.Field>
-        <Button type='submit'>Login</Button>
+        <Button 
+        type='submit'
+        content={!this.state.register ? 'Log in' : 'Register'} 
+        icon={!this.state.register ? 'sign-in' : 'signup'} 
+        />
       </Form>
     )
     const RegisterForm = (
@@ -43,7 +47,11 @@ class LoginRegisterForm extends Component {
           <label>Confirm Password</label>
           <input placeholder='Re-enter Password' type='password'/>
         </Form.Field>
-        <Button type='submit'>Register</Button>
+        <Button 
+        type='submit'
+        content={!this.state.register ? 'Log in' : 'Register'} 
+        icon={!this.state.register ? 'sign-in' : 'signup'} 
+        />
       </Form>
     )
     return (
@@ -53,7 +61,8 @@ class LoginRegisterForm extends Component {
               {this.state.register ? RegisterForm : LoginForm}
             </Grid.Column>
 
-            <Grid.Column verticalAlign='middle'>
+            <Grid.Column verticalAlign='middle' textAlign='center'>
+              {this.state.register ? "Already have an account?" : "Does not have an account?"}
               <Button 
               content={this.state.register ? 'Log in' : 'Register'} 
               icon={this.state.register ? 'sign-in' : 'signup'} 
