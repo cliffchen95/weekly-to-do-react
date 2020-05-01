@@ -5,54 +5,51 @@ import DayContainer from '../DayContainer';
 export default class WeekContainer extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      events: [],
+      startDate: new Date(props.startDate),
+      dates: []
+    }
+  }
+
+  getEvents = async () => {
+    const url = process.env.REACT_APP_API_URL + 'api/v1/events/'
+    try {
+      const res = await fetch(url, {
+        credentials: 'include',
+        method: 'GET'
+      })
+      const json = await res.json()
+      console.log(json)
+      this.setState({ events: json.data })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  async componentDidMount() {
+    await this.getEvents();
+    this.generateDays();
+  }
+  generateDays() {
+    let date = this.state.startDate;
+    const dates = []
+    for (let i = 0; i < 7; i++) {
+      dates.push(new Date(date))
+      date.setDate(date.getDate() + 1)
+    }
+    this.setState({ dates: dates})
   }
 
   render() {
-    const events = [
-      { 
-        title: "interview",
-        description: "this is very important!!",
-        category: "cog"
-      },
-      { 
-        title: "interview",
-        description: "this is very important!",
-        category: "circle"
-      },
-      { 
-        title: "interview",
-        description: "this is very important",
-        category: "coffee"
-      }
-    ]
-
-    const events2 = [
-      { 
-        title: "interview",
-        description: "this is very important!!",
-        category: "cog"
-      },
-      { 
-        title: "interview",
-        description: "this is very important!",
-        category: "circle"
-      },
-      { 
-        title: "grocery shopping",
-        description: "meat, vegitable, garlic, and so on...",
-        category: "coffee"
-      },
-      { 
-        title: "interview",
-        description: "this is very important",
-        category: "dollar sign"
-      },
-      { 
-        title: "interview",
-        description: "this is very important",
-        category: "exclamation circle"
-      }
-    ]
+    const dayContainers = (
+      this.state.dates.map((date, key) => {
+        return (
+          <DayContainer date={date} key={key} events={this.state.events.filter( event => new Date(event.date).getTime() == date.getTime())} />
+        )
+      })
+    )
+    console.log(dayContainers)
     return (
       <React.Fragment>
         <Header as='h3' block>Weekly Goals: I want to be famous</Header>
@@ -62,13 +59,7 @@ export default class WeekContainer extends Component {
         basic
         />
         <Card.Group className="ui four doubling cards" stackable centered>
-          <DayContainer events={events} date="Mon, April 24" />
-          <DayContainer events={events} date="Tues, April 25" />
-          <DayContainer events={events} date="Wed, April 26" />
-          <DayContainer events={events2} date="Thur, April 27" />
-          <DayContainer events={events} date="Fri, April 28" />
-          <DayContainer events={events} date="Sat, April 29" />
-          <DayContainer events={events} date="Sun, April 30" />
+          {dayContainers}
         </Card.Group>
       </React.Fragment>
     )

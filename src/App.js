@@ -10,23 +10,47 @@ class App extends Component {
     this.state = {
       loggedIn: false,
       user: "",
-      startDate: ""
+      startDate: new Date()
     }
   }
 
-  async componentDidMount() {
+  getGoal = async () => {
     try {
-      const url = process.env.REACT_APP_API_URL + "api/v1/users/logout"
+      const url = process.env.REACT_APP_API_URL + "api/v1/goals/"
       const res = await fetch(url, {
         credentials: 'include',
         method: 'GET'
       })
       const json = await res.json();
+      console.log("this is getGoal")
       console.log(json);
+      if (json.status == 404) {
+        return await this.createGoal({ goal: "" })
+      } else {
+        this.setState({ startDate: json.data.start_date })
+      }
     } catch (err) {
       console.log(err);
     }
   }
+  createGoal = async (info) => {
+    try {
+      const url = process.env.REACT_APP_API_URL + "api/v1/goals/";
+      const res = await fetch(url, {
+        credentials: 'include',
+        method: 'POST',
+        body: JSON.stringify(info),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const json = await res.json();
+      this.setState({ startDate: json.data.start_date })
+    } catch (err) {
+      console.log(err)   
+    }
+  }
+
   register = async (info) => {
     const url = process.env.REACT_APP_API_URL + "api/v1/users/"
     try {
@@ -39,6 +63,7 @@ class App extends Component {
         }
       });
       const json = await res.json();
+      await this.getGoal()
       if (json.status == 201) {
         this.setState({
           loggedIn: true,
@@ -63,6 +88,7 @@ class App extends Component {
         }
       });
       const json = await res.json();
+      await this.getGoal()
       if (json.status == 200) {
         this.setState({
           loggedIn: true,
@@ -77,10 +103,16 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <HeaderContainer loggedIn={this.state.loggedIn}/>
+        <HeaderContainer 
+        loggedIn={this.state.loggedIn}
+        startDate={this.state.startDate}
+        />
         {
           this.state.loggedIn ?
-          <WeekContainer /> :
+          <WeekContainer 
+          user={this.state.user}
+          startDate={this.state.startDate}
+          /> :
           <LoginRegisterForm 
           register={this.register}
           login={this.login}

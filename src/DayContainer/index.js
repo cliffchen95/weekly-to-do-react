@@ -20,7 +20,7 @@ export default function DayContainer(props) {
   return (
     <Card>
       <Card.Content>
-        <Card.Header>{props.date}</Card.Header>
+        <Card.Header>{props.date.toString()}</Card.Header>
         <Card.Description>
           <List >{events}</List>
         </Card.Description>

@@ -18,6 +18,19 @@ class LoginRegisterForm extends Component {
     this._isMounted = true;
   }
 
+  async componentDidMount() {
+    try {
+      const url = process.env.REACT_APP_API_URL + "api/v1/users/logout"
+      const res = await fetch(url, {
+        credentials: 'include',
+        method: 'GET'
+      })
+      const json = await res.json();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
   }
