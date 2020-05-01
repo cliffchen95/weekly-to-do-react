@@ -47,6 +47,22 @@ class LoginRegisterForm extends Component {
     }
   }
 
+  onLogin = async (e) => {
+    e.preventDefault()
+    try {
+      const result = await this.props.login({
+        username: this.state.username,
+        password: this.state.password
+      })
+
+      this._isMounted && this.setState({
+        warning: result.status,
+        message: result.message
+      })
+    } catch(err) {
+      console.error(err)
+    }
+  }
   switchLoginRegister = () => {
     this.setState({ 
       register: !this.state.register,
@@ -75,9 +91,16 @@ class LoginRegisterForm extends Component {
           <p>Please try again!</p>
         </Message>
       )}
+      if (this.state.warning === 412) {
+        return(
+        <Message>
+          <Message.Header>{this.state.message}</Message.Header>
+          <p>Please try again!</p>
+        </Message>
+      )}
     }
     const LoginForm = (
-      <Form>
+      <Form onSubmit={this.onLogin}>
         <Header size='medium' textAlign='center'>Log in</Header>
         <Form.Field>
           <label>Username</label>
@@ -103,6 +126,7 @@ class LoginRegisterForm extends Component {
         content={!this.state.register ? 'Log in' : 'Register'} 
         icon={!this.state.register ? 'sign-in' : 'signup'} 
         />
+        {WarningMessage()}
       </Form>
     )
     const RegisterForm = (

@@ -14,6 +14,19 @@ class App extends Component {
     }
   }
 
+  async componentDidMount() {
+    try {
+      const url = process.env.REACT_APP_API_URL + "api/v1/users/logout"
+      const res = await fetch(url, {
+        credentials: 'include',
+        method: 'GET'
+      })
+      const json = await res.json();
+      console.log(json);
+    } catch (err) {
+      console.log(err);
+    }
+  }
   register = async (info) => {
     const url = process.env.REACT_APP_API_URL + "api/v1/users/"
     try {
