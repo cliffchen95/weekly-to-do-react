@@ -1,31 +1,42 @@
 import React, { Component } from 'react';
 import { Header, Card, List, Button, Icon, Popup, Modal } from 'semantic-ui-react';
 import NewEventForm from '../NewEventForm';
+import EventDetail from '../EventDetail';
 
 export default class DayContainer extends Component {
   constructor() {
     super();
     this.state = {
-      modalOpen: false
+      modalOpen: false,
+      modalDetail: -1
     }
   }
   toggleModal = () => {
     this.setState({ modalOpen: !this.state.modalOpen })
   }
+  showDetail = (e) => {
+    this.setState({ modalDetail: e.target.name })
+  }
+  closeDetail = () => {
+    this.setState({ modalDetail: -1 })
+  }
   render() {
     const days = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
     const events = this.props.events.map((event, key) => {
       return (
-        <List.Item key={key}>
+        <List.Item key={key} >
           <List.Content floated='right'>
             <Icon name={event.category}/>
           </List.Content>
           <List.Content>
-            <List.Header as='a'>{event.title}</List.Header>
+            <List.Header as='a' onClick={this.showDetail} name={key}>{event.title}</List.Header>
             <List.Description>
               {event.description}
             </List.Description>
           </List.Content>
+          <Modal key={key} open={this.state.modalDetail == key} onClose={this.closeDetail}>
+            <EventDetail event={event} />
+          </Modal>
         </List.Item>
       )
     })

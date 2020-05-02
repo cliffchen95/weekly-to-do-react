@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Header, Button, Form, Checkbox, Divider, Grid, Segment, Message } from 'semantic-ui-react';
+import './index.css';
 
 class LoginRegisterForm extends Component {
   constructor(props) {
