@@ -10,7 +10,8 @@ export default class WeekContainer extends Component {
       events: [],
       startDate: props.startDate,
       dates: [],
-      goalModal: false
+      goalModal: false,
+      goal: this.props.goal.goal
     }
   }
 
@@ -64,6 +65,23 @@ export default class WeekContainer extends Component {
     }
     this.setState({ dates: dates})
   }
+  updateGoal = async (info) => {
+    try {
+      const url = process.env.REACT_APP_API_URL + "api/v1/goals/" + this.props.goal.id;
+      const res = await fetch(url, {
+        credentials: 'include',
+        method: 'PATCH',
+        body: JSON.stringify(info),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const json = await res.json();
+      this.setState({ goal: json.data.goal })
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   render() {
     const dayContainers = (
@@ -85,9 +103,9 @@ export default class WeekContainer extends Component {
       <Container >
       <Grid style={containerStyle}>
         <Grid.Row>
-          <Header as='h3'>Goals: {this.props.goal}</Header>
-          <Modal open={this.state.goalModal}>
-            <GoalForm />
+          <Header as='h3'>Goals: {this.state.goal}</Header>
+          <Modal open={this.state.goalModal} onClose={this.toggleGoalForm}>
+            <GoalForm updateGoal={this.updateGoal} closeModal={this.toggleGoalForm} />
           </Modal>
           <Grid.Column floated='right'>
             <Popup

@@ -6,13 +6,19 @@ export default class GoalForm extends Component {
     super(props);
     this.state = {
       goal: "",
-      date: props.date
     }
   }
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
   }
   onSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      await this.props.updateGoal(this.state)
+      this.props.closeModal();
+    } catch (err) {
+      console.log(err)   
+    }
   }
   render() {
     return(

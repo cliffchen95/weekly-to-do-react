@@ -120,7 +120,7 @@ class App extends Component {
           <WeekContainer 
           user={this.state.user}
           startDate={this.state.startDate}
-          goal={this.state.goal.goal}
+          goal={this.state.goal}
           /> :
           <LoginRegisterForm 
           register={this.register}
