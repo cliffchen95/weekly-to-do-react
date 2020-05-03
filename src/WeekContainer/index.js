@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Divider, Card, Button, Popup} from 'semantic-ui-react'
+import { Header, Divider, Card, Button, Popup, Grid, Container } from 'semantic-ui-react'
 import DayContainer from '../DayContainer';
 
 export default class WeekContainer extends Component {
@@ -40,6 +40,7 @@ export default class WeekContainer extends Component {
       })
       const json = await res.json();
       await this.getEvents();
+      console.log(json);
       return json;
     } catch (err) {
       console.log(err)
@@ -72,19 +73,29 @@ export default class WeekContainer extends Component {
         )
       })
     )
-
+    const containerStyle = {
+      paddingTop: "10px"
+    }
     return (
-      <React.Fragment>
-        <Header as='h3' block>Weekly Goals: I want to be famous</Header>
-        <Popup
-        trigger={<Button icon='edit' circular floated='right'/>}
-        content="Click to edit weekly goal"
-        basic
-        />
-        <Card.Group className="ui four doubling cards" stackable centered>
-          {dayContainers}
-        </Card.Group>
-      </React.Fragment>
+      <Container >
+      <Grid style={containerStyle}>
+        <Grid.Row>
+          <Header as='h3'>Goals: I want to be famous</Header>
+          <Grid.Column floated='right'>
+            <Popup
+            trigger={<Button icon='edit' circular/>}
+            content="Click to edit weekly goal"
+            basic
+            />
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Card.Group className="ui four doubling cards" stackable centered>
+            {dayContainers}
+          </Card.Group>
+        </Grid.Row>
+      </Grid>
+      </Container>
     )
   }
 }

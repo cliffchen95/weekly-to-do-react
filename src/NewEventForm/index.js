@@ -18,7 +18,7 @@ export default class NewEventForm extends Component {
     try {
       e.preventDefault()
       const year = this.state.date.getFullYear()
-      const month = this.state.date.getMonth() + 1
+      const month = this.state.date.getUTCMonth() + 1
       const day = this.state.date.getUTCDate()
       const result = await this.props.addEvent({
         category: this.state.category,
@@ -35,10 +35,15 @@ export default class NewEventForm extends Component {
   }
   render() {
     const options = [
-      { key: 'all', text: 'All', value: 'all' },
-      { key: 'articles', text: 'Articles', value: 'articles' },
-      { key: 'products', text: 'Products', value: 'products' },
-    ]
+      { key: "empty", text: "", value: "" },
+      { key: 'minor', text: 'Minor', value: 'circle' },
+      { key: 'important', text: 'Important', value: 'star' },
+      { key: 'deadline', text: 'Deadline', value: 'exclamation' },
+    ].map((option) => {
+      return (
+        <option key={option.key} value={option.value}>{option.text}</option>
+      )
+    })
     return(
       <Form onSubmit={this.onSubmit}>
         <Header size='medium' textAlign='center'>New Event</Header>
@@ -55,10 +60,7 @@ export default class NewEventForm extends Component {
         <Form.Field>
           <label>Category</label>
           <select value={this.state.category} onChange={this.onChange} name="category">
-            <option value="grapefruit">Grapefruit</option>
-            <option value="lime">Lime</option>
-            <option value="coconut">Coconut</option>
-            <option value="mango">Mango</option>
+            {options}
           </select>
         </Form.Field>
         <Form.Field>

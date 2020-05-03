@@ -12,6 +12,7 @@ export default class DayContainer extends Component {
     }
   }
   toggleModal = () => {
+    console.log(this.props.date)
     this.setState({ modalOpen: !this.state.modalOpen })
   }
   showDetail = (e) => {
@@ -24,14 +25,14 @@ export default class DayContainer extends Component {
     const days = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
     const events = this.props.events.map((event, key) => {
       return (
-        <List.Item key={key} >
+        <List.Item key={key}>
           <List.Content floated='right'>
-            <Icon name={event.category}/>
+            <Icon name={event.category} />
           </List.Content>
           <List.Content>
             <List.Header as='a' onClick={this.showDetail} name={key}>{event.title}</List.Header>
             <List.Description>
-              {event.description}
+              {event.description.length > 38 ? event.description.substring(0, 34) + "..." : event.description}
             </List.Description>
           </List.Content>
           <Modal key={key} open={this.state.modalDetail == key} onClose={this.closeDetail}>
@@ -40,14 +41,18 @@ export default class DayContainer extends Component {
         </List.Item>
       )
     })
+    const cardStyle = {
+      color: "#3d84a8",
+      backgroundColor: "#f7fbfc"
+    }
     return (
-      <Card>
+      <Card style={cardStyle}>
         <Card.Content>
-          <Card.Header>
+          <Card.Header textAlign='center'>
             {days[this.props.date.getUTCDay()]}, {this.props.date.getUTCDate()}
           </Card.Header>
           <Card.Description>
-            <List >{events}</List>
+            <List divided>{events}</List>
           </Card.Description>
         </Card.Content>
         <Card.Content extra>

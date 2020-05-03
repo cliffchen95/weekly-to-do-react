@@ -93,21 +93,21 @@ class LoginRegisterForm extends Component {
     const WarningMessage = () => {
       if (this.state.warning === 1) {
         return(
-        <Message>
+        <Message negative>
           <Message.Header>Your password does not match!</Message.Header>
           <p>Please try again!</p>
         </Message>
       )}
       if (this.state.warning === 401) {
         return(
-        <Message>
+        <Message negative>
           <Message.Header>{this.state.message}</Message.Header>
           <p>Please try again!</p>
         </Message>
       )}
       if (this.state.warning === 412) {
         return(
-        <Message>
+        <Message negative>
           <Message.Header>{this.state.message}</Message.Header>
           <p>Please try again!</p>
         </Message>
