@@ -132,7 +132,6 @@ class App extends Component {
         loggedIn={this.state.loggedIn}
         startDate={this.state.startDate}
         logout={this.logout}
-        user={this.state.user}
         />
         {
           this.state.loggedIn ?

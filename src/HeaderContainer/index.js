@@ -20,7 +20,7 @@ export default function HeaderContainer(props) {
       {
         props.loggedIn 
         ?
-        <Button size='small' icon='sign-out' floated="right" content="Log out"/>
+        <Button size='small' icon='sign-out' floated="right" content="Log out" onClick={props.logout}/>
         :
         <Header as='h4' textAlign='right' inverted>You are not logged in</Header>
       }
