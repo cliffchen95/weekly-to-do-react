@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Header, Divider, Card, Button, Popup, Grid, Container } from 'semantic-ui-react'
+import { Header, Divider, Card, Button, Popup, Grid, Container, Modal} from 'semantic-ui-react'
 import DayContainer from '../DayContainer';
+import GoalForm from '../GoalForm';
 
 export default class WeekContainer extends Component {
   constructor(props) {
@@ -8,7 +9,8 @@ export default class WeekContainer extends Component {
     this.state = {
       events: [],
       startDate: props.startDate,
-      dates: []
+      dates: [],
+      goalModal: false
     }
   }
 
@@ -50,7 +52,9 @@ export default class WeekContainer extends Component {
     await this.getEvents();
     this.generateDays(this.state.startDate);
   }
-  
+  toggleGoalForm = () => {
+    this.setState({ goalModal: !this.state.goalModal })
+  }
   generateDays(startDate) {
     let date = new Date(startDate);
     const dates = []
@@ -76,23 +80,25 @@ export default class WeekContainer extends Component {
     const containerStyle = {
       paddingTop: "10px"
     }
+
     return (
       <Container >
       <Grid style={containerStyle}>
         <Grid.Row>
-          <Header as='h3'>Goals: I want to be famous</Header>
+          <Header as='h3'>Goals: {this.props.goal}</Header>
+          <Modal open={this.state.goalModal}>
+            <GoalForm />
+          </Modal>
           <Grid.Column floated='right'>
             <Popup
-            trigger={<Button icon='edit' circular/>}
+            trigger={<Button icon='edit' circular onClick={this.toggleGoalForm}/>}
             content="Click to edit weekly goal"
             basic
             />
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row>
-          <Card.Group className="ui four doubling cards" stackable centered>
-            {dayContainers}
-          </Card.Group>
+        <Grid.Row as="Card.Group" className="ui four doubling cards" stackable>
+          {dayContainers}
         </Grid.Row>
       </Grid>
       </Container>

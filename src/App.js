@@ -11,7 +11,8 @@ class App extends Component {
     this.state = {
       loggedIn: false,
       user: "",
-      startDate: ""
+      startDate: "",
+      goal: ""
     }
   }
 
@@ -27,7 +28,10 @@ class App extends Component {
         return await this.createGoal({ goal: "" })
       } else {
         const startDate = new Date(json.data.start_date);
-        this.setState({ startDate: startDate.toGMTString() })
+        this.setState({ 
+          startDate: startDate.toGMTString() ,
+          goal: json.data.goal
+        })
       }
     } catch (err) {
       console.log(err);
@@ -46,7 +50,10 @@ class App extends Component {
       })
       const json = await res.json();
       const startDate = new Date(json.data.start_date);
-      this.setState({ startDate: startDate.toGMTString() })
+      this.setState({ 
+        startDate: startDate.toGMTString() ,
+        goal: json.data.goal
+      })
     } catch (err) {
       console.log(err)   
     }
@@ -113,6 +120,7 @@ class App extends Component {
           <WeekContainer 
           user={this.state.user}
           startDate={this.state.startDate}
+          goal={this.state.goal.goal}
           /> :
           <LoginRegisterForm 
           register={this.register}
