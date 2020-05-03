@@ -53,7 +53,6 @@ export default class NewEventForm extends Component {
           placeholder='Title'
           name='title'
           value={this.state.title}
-          name="title"
           onChange={this.onChange}
           />
         </Form.Field>

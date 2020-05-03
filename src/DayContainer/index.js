@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Card, List, Button, Icon, Popup, Modal } from 'semantic-ui-react';
+import { Card, List, Button, Icon, Modal, Popup } from 'semantic-ui-react';
 import NewEventForm from '../NewEventForm';
 import EventDetail from '../EventDetail';
 
@@ -52,22 +52,18 @@ export default class DayContainer extends Component {
             {days[this.props.date.getUTCDay()]}, {this.props.date.getUTCDate()}
           </Card.Header>
           <Card.Description>
-            <List divided>{events}</List>
+            {
+              this.props.events.length === 0 ?
+              "There is nothing going on!" :
+              <List divided>{events}</List>
+            }
           </Card.Description>
         </Card.Content>
         <Card.Content extra>
         <Modal 
-        trigger={
-          <Button 
-          icon='add' 
-          circular 
-          floated='right' 
-          size='tiny'
-          onClick={this.toggleModal}
-          />}
         open={this.state.modalOpen}
         onClose={this.toggleModal}
-          >
+        >
           <Modal.Header>{this.props.date.toDateString()}</Modal.Header>
           <Modal.Content>
             <NewEventForm 
@@ -77,6 +73,17 @@ export default class DayContainer extends Component {
             />
           </Modal.Content>
         </Modal>
+        <Popup
+        trigger={<Button 
+          icon='add' 
+          circular 
+          floated='right' 
+          size='tiny'
+          onClick={this.toggleModal}
+          />}
+        content="Click to add event"
+        basic
+        />
         </Card.Content>
       </Card>
     )

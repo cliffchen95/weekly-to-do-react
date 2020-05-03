@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Divider, Card, Button, Popup, Grid, Container, Modal} from 'semantic-ui-react'
+import { Header, Button, Popup, Grid, Container, Modal} from 'semantic-ui-react'
 import DayContainer from '../DayContainer';
 import GoalForm from '../GoalForm';
 
@@ -89,7 +89,7 @@ export default class WeekContainer extends Component {
         return (
           <DayContainer 
           date={new Date(date)} key={key} 
-          events={this.state.events.filter( event => new Date(event.date).getDate() == new Date(date).getDate())}
+          events={this.state.events.filter( event => new Date(event.date).getDate() === new Date(date).getDate())}
           addEvent={this.addEvent}
           />
         )
@@ -103,7 +103,7 @@ export default class WeekContainer extends Component {
       <Container >
       <Grid style={containerStyle}>
         <Grid.Row>
-          <Header as='h3'>Goals: {this.state.goal}</Header>
+          <Header as='h3'>Goal: {this.state.goal}</Header>
           <Modal open={this.state.goalModal} onClose={this.toggleGoalForm}>
             <GoalForm updateGoal={this.updateGoal} closeModal={this.toggleGoalForm} />
           </Modal>
@@ -115,7 +115,7 @@ export default class WeekContainer extends Component {
             />
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row as="Card.Group" className="ui four doubling cards" stackable>
+        <Grid.Row  className="ui four doubling cards">
           {dayContainers}
         </Grid.Row>
       </Grid>

@@ -16,6 +16,23 @@ class App extends Component {
     }
   }
 
+  logout = async () => {
+    try {
+      const url = process.env.REACT_APP_API_URL + "api/v1/users/logout"
+      const res = await fetch(url, {
+        credentials: 'include',
+        method: 'GET'
+      })
+      const json = await res.json();
+      this.setState({ 
+        loggedIn: false,
+        user: ""
+      })
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   getGoal = async () => {
     try {
       const url = process.env.REACT_APP_API_URL + "api/v1/goals/"
@@ -24,7 +41,7 @@ class App extends Component {
         method: 'GET'
       })
       const json = await res.json();
-      if (json.status == 404) {
+      if (json.status === 404) {
         return await this.createGoal({ goal: "" })
       } else {
         const startDate = new Date(json.data.start_date);
@@ -72,7 +89,7 @@ class App extends Component {
       });
       const json = await res.json();
       await this.getGoal()
-      if (json.status == 201) {
+      if (json.status === 201) {
         this.setState({
           loggedIn: true,
           user: json.data.username
@@ -97,7 +114,7 @@ class App extends Component {
       });
       const json = await res.json();
       await this.getGoal()
-      if (json.status == 200) {
+      if (json.status === 200) {
         this.setState({
           loggedIn: true,
           user: json.data.username
@@ -114,6 +131,8 @@ class App extends Component {
         <HeaderContainer 
         loggedIn={this.state.loggedIn}
         startDate={this.state.startDate}
+        logout={this.logout}
+        user={this.state.user}
         />
         {
           this.state.loggedIn ?
