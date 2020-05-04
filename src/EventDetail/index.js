@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'semantic-ui-react'
 
 export default function EventDetail(props) {
   return (
@@ -7,6 +8,7 @@ export default function EventDetail(props) {
       <div className="content">
         <p>{props.event.description}</p>
       </div>
+      <Button content="delete" onClick={ () => props.delete(props.event.id) }/>
     </React.Fragment>
   )
 }

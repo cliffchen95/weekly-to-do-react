@@ -52,6 +52,21 @@ export default class WeekContainer extends Component {
       console.log(err)
     }
   }
+
+  deleteEvent = async (id) => {
+    try {
+        const url = process.env.REACT_APP_API_URL + 'api/v1/events/' + id
+        const res = await fetch(url, {
+          credentials: 'include',
+          method: 'DELETE'
+        })
+        const json = await res.json()
+        console.log(json)
+    } catch (err) {
+        console.log(err)
+    }
+  }
+
   async componentDidMount() {
     await this.getEvents();
     this.generateDays(this.state.startDate);
@@ -106,6 +121,7 @@ export default class WeekContainer extends Component {
           date={new Date(date)} key={key} 
           events={this.state.events.filter( event => new Date(event.date).getDate() === new Date(date).getDate())}
           addEvent={this.addEvent}
+          deleteEvent={this.deleteEvent}
           />
         )
       })

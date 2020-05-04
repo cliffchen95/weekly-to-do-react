@@ -36,7 +36,7 @@ export default class DayContainer extends Component {
             </List.Description>
           </List.Content>
           <Modal key={key} open={this.state.modalDetail == key} onClose={this.closeDetail}>
-            <EventDetail event={event} />
+            <EventDetail event={event} delete={this.props.deleteEvent}/>
           </Modal>
         </List.Item>
       )
