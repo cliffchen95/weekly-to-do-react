@@ -61,7 +61,8 @@ export default class WeekContainer extends Component {
           method: 'DELETE'
         })
         const json = await res.json()
-        console.log(json)
+        await this.getEvents();
+        return json;
     } catch (err) {
         console.log(err)
     }
