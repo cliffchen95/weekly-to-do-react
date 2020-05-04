@@ -42,7 +42,7 @@ class App extends Component {
     const date = new Date(this.state.date)
     date.setDate(date.getDate() - 7)
     this.setState({ date: new Date(date) })
-  }
+  } 
   getGoal = async () => {
     try {
       const url = process.env.REACT_APP_API_URL + "api/v1/goals/"
