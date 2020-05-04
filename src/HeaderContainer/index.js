@@ -4,15 +4,22 @@ import { Header, Divider, Button} from 'semantic-ui-react';
 export default function HeaderContainer(props) {
   const headerStyle = {
     backgroundColor: "#769fcd",
-    padding: "10px",
+    padding: "10px"
   }
   const titleStyle = {
     marginLeft: '20px'
   }
+  const divStyle = {
+    paddingLeft: "50px",
+    color: "white"
+  }
+  const date = new Date(props.date)
+  const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
   const weekDiv = (
-    <div>
-      <Button content="Prev Week" size="tiny"/>
-      <Button content="Next Week" size="tiny"/>
+    <div style={divStyle}>
+      <h3>{month[date.getUTCMonth()]}</h3>
+      <Button content="Prev Week" size="tiny" onClick={props.prev}/>
+      <Button content="Next Week" size="tiny" onClick={props.next}/>
     </div>
   )
   return(

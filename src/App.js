@@ -11,8 +11,9 @@ class App extends Component {
     this.state = {
       loggedIn: false,
       user: "",
-      startDate: "",
-      goal: ""
+      currentDate: "",
+      goal: "",
+      date: ""
     }
   }
 
@@ -32,7 +33,16 @@ class App extends Component {
       console.log(err);
     }
   }
-
+  nextWeek = () => {
+    const date = new Date(this.state.date)
+    date.setDate(date.getDate() + 7)
+    this.setState({ date: new Date(date) })
+  }
+  prevWeek = () => {
+    const date = new Date(this.state.date)
+    date.setDate(date.getDate() - 7)
+    this.setState({ date: new Date(date) })
+  }
   getGoal = async () => {
     try {
       const url = process.env.REACT_APP_API_URL + "api/v1/goals/"
@@ -47,7 +57,8 @@ class App extends Component {
         const startDate = new Date(json.data.start_date);
         this.setState({ 
           startDate: startDate.toGMTString() ,
-          goal: json.data.goal
+          goal: json.data.goal,
+          date: json.data.start_date
         })
       }
     } catch (err) {
@@ -69,7 +80,8 @@ class App extends Component {
       const startDate = new Date(json.data.start_date);
       this.setState({ 
         startDate: startDate.toGMTString() ,
-        goal: json.data.goal
+        goal: json.data.goal,
+        date: json.data.start_date
       })
     } catch (err) {
       console.log(err)   
@@ -130,14 +142,16 @@ class App extends Component {
       <div className="App">
         <HeaderContainer 
         loggedIn={this.state.loggedIn}
-        startDate={this.state.startDate}
+        date={this.state.date}
         logout={this.logout}
+        next={this.nextWeek}
+        prev={this.prevWeek}
         />
         {
           this.state.loggedIn ?
           <WeekContainer 
           user={this.state.user}
-          startDate={this.state.startDate}
+          date={this.state.date}
           goal={this.state.goal}
           /> :
           <LoginRegisterForm 

@@ -45,8 +45,13 @@ export default class DayContainer extends Component {
       color: "#3d84a8",
       backgroundColor: "#f7fbfc"
     }
+    const date = new Date()
+    const today = new Date(date.getUTCFullYear(), date.getMonth(), date.getDate())
+    console.log(today)
+    console.log(today.getUTCDate())
+    const isToday = (today.getUTCDate() == this.props.date.getUTCDate()) && (today.getUTCMonth() == this.props.date.getUTCMonth())
     return (
-      <Card style={cardStyle}>
+      <Card style={cardStyle} color={ isToday ? "red" : "blue" }>
         <Card.Content>
           <Card.Header textAlign='center'>
             {days[this.props.date.getUTCDay()]}, {this.props.date.getUTCDate()}
@@ -64,7 +69,7 @@ export default class DayContainer extends Component {
         open={this.state.modalOpen}
         onClose={this.toggleModal}
         >
-          <Modal.Header>{this.props.date.toDateString()}</Modal.Header>
+          <Modal.Header>{days[this.props.date.getUTCDay()]}, {this.props.date.getUTCDate()}</Modal.Header>
           <Modal.Content>
             <NewEventForm 
             date={this.props.date} 

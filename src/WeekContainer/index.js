@@ -8,7 +8,7 @@ export default class WeekContainer extends Component {
     super(props);
     this.state = {
       events: [],
-      startDate: props.startDate,
+      startDate: props.date,
       dates: [],
       goalModal: false,
       goal: this.props.goal.goal
@@ -16,7 +16,11 @@ export default class WeekContainer extends Component {
   }
 
   getEvents = async () => {
-    const url = process.env.REACT_APP_API_URL + 'api/v1/events/'
+    const date = new Date(this.state.startDate)
+    console.log("this is in get Event")
+    const query = `?year=${date.getUTCFullYear()}&month=${date.getUTCMonth()+1}&day=${date.getUTCDate()}`
+    console.log(query)
+    const url = process.env.REACT_APP_API_URL + 'api/v1/events/' + query
     try {
       const res = await fetch(url, {
         credentials: 'include',
@@ -43,7 +47,6 @@ export default class WeekContainer extends Component {
       })
       const json = await res.json();
       await this.getEvents();
-      console.log(json);
       return json;
     } catch (err) {
       console.log(err)
@@ -52,6 +55,18 @@ export default class WeekContainer extends Component {
   async componentDidMount() {
     await this.getEvents();
     this.generateDays(this.state.startDate);
+  }
+  async componentDidUpdate(prevProps) {
+    if (this.props.date !== prevProps.date) {
+      console.log("there has been a change in props date")
+      console.log('this is props.date')
+      console.log(this.props.date)
+      console.log("this is prevProps")
+      console.log(prevProps.date)
+      await this.setState({ startDate: this.props.date })
+      await this.getEvents();
+      this.generateDays(this.state.startDate);
+    }
   }
   toggleGoalForm = () => {
     this.setState({ goalModal: !this.state.goalModal })
@@ -115,7 +130,7 @@ export default class WeekContainer extends Component {
             />
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row  className="ui four doubling cards">
+        <Grid.Row  className="ui four doubling stackable cards">
           {dayContainers}
         </Grid.Row>
       </Grid>
