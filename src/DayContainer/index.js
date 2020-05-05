@@ -8,7 +8,8 @@ export default class DayContainer extends Component {
     super();
     this.state = {
       modalOpen: false,
-      modalDetail: -1
+      modalDetail: -1,
+      edit: -1
     }
   }
   toggleModal = () => {
@@ -25,6 +26,13 @@ export default class DayContainer extends Component {
     this.closeDetail()
     this.props.deleteEvent(id)
   }
+  openEdit = (id) => {
+    this.setState({ edit: id })
+  }
+  closeEdit = () => {
+    this.setState({ edit: -1 })
+  }
+
   render() {
     const days = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
     const events = this.props.events.map((event, key) => {
@@ -40,7 +48,7 @@ export default class DayContainer extends Component {
             </List.Description>
           </List.Content>
           <Modal key={key} open={this.state.modalDetail == key} onClose={this.closeDetail}>
-            <EventDetail event={event} delete={this.delete}/>
+            <EventDetail event={event} delete={this.delete} openEdit={this.openEdit} clsoeEdit={this.closeEdit} edit={this.state.edit} />
           </Modal>
         </List.Item>
       )
