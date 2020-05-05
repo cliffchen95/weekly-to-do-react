@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Button, Popup, Grid, Container, Modal} from 'semantic-ui-react'
+import { Header, Button, Popup, Grid, Container, Modal } from 'semantic-ui-react'
 import DayContainer from '../DayContainer';
 import GoalForm from '../GoalForm';
 
@@ -11,15 +11,13 @@ export default class WeekContainer extends Component {
       startDate: props.date,
       dates: [],
       goalModal: false,
-      goal: this.props.goal.goal
+      goal: props.goal.goal
     }
   }
 
   getEvents = async () => {
     const date = new Date(this.state.startDate)
-    console.log("this is in get Event")
     const query = `?year=${date.getUTCFullYear()}&month=${date.getUTCMonth()+1}&day=${date.getUTCDate()}`
-    console.log(query)
     const url = process.env.REACT_APP_API_URL + 'api/v1/events/' + query
     try {
       const res = await fetch(url, {
@@ -27,7 +25,6 @@ export default class WeekContainer extends Component {
         method: 'GET'
       })
       const json = await res.json()
-      console.log(json)
       this.setState({ events: json.data })
     } catch (err) {
       console.log(err)
@@ -55,31 +52,52 @@ export default class WeekContainer extends Component {
 
   deleteEvent = async (id) => {
     try {
-        const url = process.env.REACT_APP_API_URL + 'api/v1/events/' + id
-        const res = await fetch(url, {
-          credentials: 'include',
-          method: 'DELETE'
-        })
-        const json = await res.json()
-        await this.getEvents();
-        return json;
+      const url = process.env.REACT_APP_API_URL + 'api/v1/events/' + id
+      const res = await fetch(url, {
+        credentials: 'include',
+        method: 'DELETE'
+      })
+      const json = await res.json()
+      await this.getEvents();
+      return json;
     } catch (err) {
-        console.log(err)
+      console.log(err)
     }
   }
 
+  updateEvent = async (id, info) => {
+    try {
+      const url = process.env.REACT_APP_API_URL + 'api/v1/events/' + id;
+      const res = await fetch(url, {
+        credentials: 'include',
+        method: 'PATCH',
+        body: JSON.stringify(info),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const json = await res.json()
+      await this.getEvents();
+      console.log(json)
+    } catch (err) {
+      console.log(err)
+    }
+  }
   async componentDidMount() {
     await this.getEvents();
     this.generateDays(this.state.startDate);
   }
   async componentDidUpdate(prevProps) {
-    if (this.props.date !== prevProps.date) {
+    if (this.props.date !== prevProps.date || this.props.goal !== prevProps.goal ) {
       console.log("there has been a change in props date")
       console.log('this is props.date')
-      console.log(this.props.date)
+      console.log(this.props.goal)
       console.log("this is prevProps")
-      console.log(prevProps.date)
-      await this.setState({ startDate: this.props.date })
+      console.log(prevProps.goal)
+      await this.setState({ 
+        startDate: this.props.date,
+        goal: this.props.goal.goal 
+      })
       await this.getEvents();
       this.generateDays(this.state.startDate);
     }
@@ -94,7 +112,7 @@ export default class WeekContainer extends Component {
       dates.push(date.toGMTString())
       date.setDate(date.getDate() + 1)
     }
-    this.setState({ dates: dates})
+    this.setState({ dates: dates })
   }
   updateGoal = async (info) => {
     try {
@@ -123,6 +141,7 @@ export default class WeekContainer extends Component {
           events={this.state.events.filter( event => new Date(event.date).getDate() === new Date(date).getDate())}
           addEvent={this.addEvent}
           deleteEvent={this.deleteEvent}
+          updateEvent={this.updateEvent}
           />
         )
       })
@@ -130,7 +149,7 @@ export default class WeekContainer extends Component {
     const containerStyle = {
       paddingTop: "10px"
     }
-
+    console.log(this.state)
     return (
       <Container >
       <Grid style={containerStyle}>
@@ -155,4 +174,3 @@ export default class WeekContainer extends Component {
     )
   }
 }
-

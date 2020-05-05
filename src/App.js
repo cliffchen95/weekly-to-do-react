@@ -11,9 +11,9 @@ class App extends Component {
     this.state = {
       loggedIn: false,
       user: "",
-      currentDate: "",
+      currentDate: new Date(),
       goal: "",
-      date: ""
+      date: new Date()
     }
   }
 
@@ -25,7 +25,7 @@ class App extends Component {
         method: 'GET'
       })
       const json = await res.json();
-      this.setState({ 
+      this.setState({
         loggedIn: false,
         user: ""
       })
@@ -33,19 +33,25 @@ class App extends Component {
       console.log(err);
     }
   }
-  nextWeek = () => {
+  nextWeek = async () => {
     const date = new Date(this.state.date)
     date.setDate(date.getDate() + 7)
-    this.setState({ date: new Date(date) })
+    await this.setState({ date: new Date(date) })
+    const goal = await this.getGoal()
+    await this.setState({ goal: goal.data.goal })
   }
-  prevWeek = () => {
+  prevWeek = async () => {
     const date = new Date(this.state.date)
     date.setDate(date.getDate() - 7)
-    this.setState({ date: new Date(date) })
-  } 
+    await this.setState({ date: new Date(date) })
+    const goal = await this.getGoal()
+    await this.setState({ goal: goal.data.goal })
+  }
   getGoal = async () => {
     try {
-      const url = process.env.REACT_APP_API_URL + "api/v1/goals/"
+      const date = new Date(this.state.date)
+      const query = `?year=${date.getUTCFullYear()}&month=${date.getUTCMonth()+1}&day=${date.getUTCDate()}`
+      const url = process.env.REACT_APP_API_URL + "api/v1/goals/" + query
       const res = await fetch(url, {
         credentials: 'include',
         method: 'GET'
@@ -54,12 +60,7 @@ class App extends Component {
       if (json.status === 404) {
         return await this.createGoal({ goal: "" })
       } else {
-        const startDate = new Date(json.data.start_date);
-        this.setState({ 
-          startDate: startDate.toGMTString() ,
-          goal: json.data.goal,
-          date: json.data.start_date
-        })
+        return json;
       }
     } catch (err) {
       console.log(err);
@@ -67,7 +68,9 @@ class App extends Component {
   }
   createGoal = async (info) => {
     try {
-      const url = process.env.REACT_APP_API_URL + "api/v1/goals/";
+      const date = new Date(this.state.date)
+      const query = `?year=${date.getUTCFullYear()}&month=${date.getUTCMonth()+1}&day=${date.getUTCDate()}`
+      const url = process.env.REACT_APP_API_URL + "api/v1/goals/" + query
       const res = await fetch(url, {
         credentials: 'include',
         method: 'POST',
@@ -77,14 +80,9 @@ class App extends Component {
         }
       })
       const json = await res.json();
-      const startDate = new Date(json.data.start_date);
-      this.setState({ 
-        startDate: startDate.toGMTString() ,
-        goal: json.data.goal,
-        date: json.data.start_date
-      })
+      return json;
     } catch (err) {
-      console.log(err)   
+      console.log(err)
     }
   }
 
@@ -100,7 +98,7 @@ class App extends Component {
         }
       });
       const json = await res.json();
-      await this.getGoal()
+      const goal = await this.getGoal()
       if (json.status === 201) {
         this.setState({
           loggedIn: true,
@@ -125,19 +123,24 @@ class App extends Component {
         }
       });
       const json = await res.json();
-      await this.getGoal()
+      const goal = await this.getGoal()
       if (json.status === 200) {
         this.setState({
           loggedIn: true,
-          user: json.data.username
+          user: json.data.username,
+          goal: goal.data.goal,
+          date: goal.data.start_date
         });
       }
+      console.log(goal)
       return json;
     } catch (err) {
       console.error(err);
     }
   }
   render() {
+    console.log("this is in APP")
+    console.log(this.state)
     return (
       <div className="App">
         <HeaderContainer 

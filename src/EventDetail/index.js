@@ -14,7 +14,7 @@ export default function EventDetail(props) {
       { 
         props.event.id === props.edit 
         &&
-        <EditEventForm event={props.event} />
+        <EditEventForm event={props.event} update={props.update}/>
       }
 
     </React.Fragment>

@@ -33,6 +33,10 @@ export default class DayContainer extends Component {
     this.setState({ edit: -1 })
   }
 
+  update = (id, info) => {
+    this.closeEdit()
+    this.props.updateEvent(id, info)
+  }
   render() {
     const days = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
     const events = this.props.events.map((event, key) => {
@@ -48,7 +52,14 @@ export default class DayContainer extends Component {
             </List.Description>
           </List.Content>
           <Modal key={key} open={this.state.modalDetail == key} onClose={this.closeDetail}>
-            <EventDetail event={event} delete={this.delete} openEdit={this.openEdit} clsoeEdit={this.closeEdit} edit={this.state.edit} />
+            <EventDetail 
+            event={event} 
+            delete={this.delete} 
+            openEdit={this.openEdit} 
+            clsoeEdit={this.closeEdit} 
+            edit={this.state.edit} 
+            update={this.update}
+            />
           </Modal>
         </List.Item>
       )
@@ -59,8 +70,6 @@ export default class DayContainer extends Component {
     }
     const date = new Date()
     const today = new Date(date.getUTCFullYear(), date.getMonth(), date.getDate())
-    console.log(today)
-    console.log(today.getUTCDate())
     const isToday = (today.getUTCDate() == this.props.date.getUTCDate()) && (today.getUTCMonth() == this.props.date.getUTCMonth())
     return (
       <Card style={cardStyle} color={ isToday ? "red" : "blue" }>

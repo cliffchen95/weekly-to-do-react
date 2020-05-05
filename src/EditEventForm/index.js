@@ -17,10 +17,18 @@ export default class EditEventForm extends Component {
   onSubmit = async (e) => {
     try {
       e.preventDefault()
-      const year = this.state.date.getFullYear()
-      const month = this.state.date.getUTCMonth() + 1
-      const day = this.state.date.getUTCDate()
-      this.props.closeModel();
+      const date = new Date(this.state.date)
+      const year = date.getFullYear()
+      const month = date.getUTCMonth() + 1
+      const day = date.getUTCDate()
+      await this.props.update(this.props.event.id, {
+        category: this.state.category,
+        title: this.state.title,
+        description: this.state.description,
+        year: year,
+        month: month,
+        day: day
+      })
     } catch (err) {
       console.log(err)
     }
@@ -65,8 +73,8 @@ export default class EditEventForm extends Component {
         </Form.Field>
         <Button 
         type='submit'
-        content='Add Event' 
-        icon="add"
+        content='Edit Event' 
+        icon="edit"
         />
       </Form>
     )
