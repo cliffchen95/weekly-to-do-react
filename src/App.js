@@ -139,8 +139,6 @@ class App extends Component {
     }
   }
   render() {
-    console.log("this is in APP")
-    console.log(this.state)
     return (
       <div className="App">
         <HeaderContainer 

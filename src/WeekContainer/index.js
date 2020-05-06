@@ -149,7 +149,6 @@ export default class WeekContainer extends Component {
     const containerStyle = {
       paddingTop: "10px"
     }
-    console.log(this.state)
     return (
       <Container >
       <Grid style={containerStyle}>
